@@ -282,3 +282,64 @@ body:has(.modal[open]) { overflow: hidden; }
 .btn-remove:hover { border-color: var(--red); }
 .confirm { margin-top: 1rem; padding: 1rem 1.15rem; background: var(--red-tint); border: 1px solid var(--red-line); border-radius: 14px; }
 .confirm p { margin-bottom: .85rem; color: var(--red-dark); font-weight: 600; line-height: 1.5; }
+ 
+/* ===== Partner portal (externalStakeholder.html) =====
+   Everything below starts with ".xs" (the <body> class on that page), so it can
+   never change the admin pages. */
+.xs .topbar { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding: .85rem 1.5rem; background: var(--bg); border-bottom: 1px solid var(--line); }
+.xs .logo { display: flex; align-items: center; font-size: 1.25rem; font-weight: 700; }
+.xs .logo-dot { color: var(--red); }
+.xs .logo-sub { margin-left: .75rem; padding: .2rem .7rem; border: 1px solid var(--red-line); border-radius: 999px; background: var(--red-tint); color: var(--red-dark); font-size: .72rem; font-weight: 700; letter-spacing: .04em; }
+.xs .role { display: flex; align-items: center; gap: .75rem; }
+.xs .role-text { display: flex; flex-direction: column; text-align: right; line-height: 1.3; }
+.xs .role-text strong { font-size: .95rem; }
+.xs .role-text span { font-size: .8rem; color: var(--muted); }
+.xs .avatar { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--red); color: #fff; font-size: .85rem; font-weight: 700; }
+ 
+.xs .page { flex: 1; width: 100%; max-width: 1128px; margin-inline: auto; padding: 2.5rem 1.5rem 3rem; }
+.xs .page-head { margin-bottom: 1.75rem; }
+.xs .page-head h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); line-height: 1.15; letter-spacing: -.02em; }
+.xs .page-head p { margin-top: .5rem; max-width: 42rem; color: var(--ink-soft); }
+ 
+.xs-layout { display: grid; gap: 1.5rem; align-items: start; }
+@media (min-width: 960px) { .xs-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
+ 
+/* Reset the admin "slide-in panel" look: here a panel is a plain white card */
+.xs .panel { width: auto; max-width: none; height: auto; overflow: visible; padding: 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: none; }
+.xs .panel-title { font-size: 1.25rem; font-weight: 700; }
+.xs .panel-sub { margin: .35rem 0 1.5rem; font-size: .95rem; color: var(--ink-soft); }
+ 
+.xs .field { margin-bottom: 1rem; }
+.xs .field label { display: block; margin-bottom: .5rem; font-weight: 700; font-size: .95rem; }
+.xs .field small { display: block; margin-top: .4rem; font-size: .85rem; color: var(--muted); }
+.xs input, .xs select, .xs textarea { display: block; width: 100%; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); font: inherit; font-size: 1rem; }
+.xs textarea { min-height: 5.5rem; line-height: 1.45; resize: vertical; }
+.xs select { min-height: 3rem; cursor: pointer; }
+.xs input:focus, .xs select:focus, .xs textarea:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(220, 42, 28, .18); }
+.xs input[readonly], .xs textarea[readonly] { background: var(--field); color: var(--muted); cursor: not-allowed; }
+.xs input:user-invalid, .xs select:user-invalid, .xs textarea:user-invalid { border-color: var(--red); }
+.xs .money input { padding-left: 2rem; }
+.xs .row { display: grid; gap: 0 1rem; }
+@media (min-width: 520px) { .xs .row { grid-template-columns: 1fr 1fr; } }
+.xs .editable-tag { margin-left: .4rem; padding: .1rem .55rem; border: 1px solid var(--red-line); border-radius: 999px; background: var(--red-tint); color: var(--red-dark); font-size: .72rem; font-weight: 700; vertical-align: middle; }
+ 
+.xs .form-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+.xs .btn-secondary { background: var(--surface); border-color: var(--line); color: var(--ink-soft); }
+.xs .btn-secondary:hover { border-color: var(--muted); }
+.xs .btn-small { min-height: 2.5rem; padding: 0 1.1rem; font-size: .9rem; }
+ 
+.xs .list-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
+.xs .list-count { font-size: .875rem; color: var(--muted); }
+.xs .offer { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-top: 1px solid var(--line); }
+.xs .offer .btn { flex: none; }
+.xs .offer-name { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: 1.05rem; font-weight: 700; }
+.xs .offer-name .tag { padding: .15rem .65rem; font-size: .78rem; font-weight: 600; }
+.xs .offer-meta { margin: .2rem 0 .5rem; font-size: .85rem; color: var(--muted); }
+.xs .offer-facts { display: grid; gap: .15rem; font-size: .9rem; color: var(--ink-soft); }
+.xs .offer-facts strong { color: var(--ink); }
+ 
+/* Update pop-up (a div, not a <dialog>, so it needs its own overlay) */
+.xs .modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; width: auto; max-height: none; padding: 1rem; border: 0; border-radius: 0; background: rgba(15, 26, 54, .55); box-shadow: none; overflow: auto; }
+.xs .modal.hidden { display: none; }
+.xs .modal-card { width: min(38rem, 100%); max-height: calc(100vh - 2rem); overflow: auto; padding: 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 24px 60px rgba(15, 26, 54, .28); }
+.xs .modal-note { margin: .35rem 0 1.25rem; padding: .75rem 1rem; border: 1px solid var(--red-line); border-radius: 12px; background: var(--red-tint); color: var(--red-dark); font-size: .9rem; }

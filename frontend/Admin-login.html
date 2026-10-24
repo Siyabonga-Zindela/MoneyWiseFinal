@@ -22,11 +22,10 @@
       </nav>
     </div>
   </header>
-            
+ 
   <main class="auth-main">
     <section class="card auth-card" aria-labelledby="auth-title">
-     <!-- <span class="tag auth-tag">Admin only</span>-->
-      <h1 id="auth-title" class="auth-title" style="text-align: center;">Sign in</span></h1>
+      <h1 id="auth-title" class="auth-title" style="text-align: center;">Sign in</h1>
       <p class="auth-sub" style="text-align: center;">Sign in to review the phishing reports submitted by users.</p>
  
       <form id="login-form" novalidate>
@@ -56,8 +55,8 @@
           <p class="field-hint" id="caps-hint" hidden>Caps Lock is on.</p>
         </div>
  
-        <button type="submit" class="btn btn-primary auth-submit">Sign in</button>
-        <button type="submit" class="btn btn-primary auth-submit">Stakeholder</button>
+        <button type="submit" class="btn btn-primary auth-submit" data-target="admin-dashboard.html">Sign in</button>
+        <button type="submit" class="btn btn-primary auth-submit" data-target="externalStakeholder.html">Stakeholder</button>
         <a href="#" class="auth-link">Forgot your password?</a>
       </form>
     </section>
@@ -99,10 +98,15 @@
       password.addEventListener('keyup', checkCaps);
       password.addEventListener('blur', function () { caps.hidden = true; });
  
-      // Sign in: go straight to the admin dashboard
+      // Each button opens its own dashboard (data-target on the button).
+      // Pressing Enter in a field counts as clicking the first button (Sign in).
+      var target = 'admin-dashboard.html';
+      Array.prototype.forEach.call(form.querySelectorAll('button[type="submit"]'), function (btn) {
+        btn.addEventListener('click', function () { target = btn.getAttribute('data-target'); });
+      });
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        window.location.href = 'admin-dashboard.html';
+        window.location.href = target;
       });
     })();
   </script>
