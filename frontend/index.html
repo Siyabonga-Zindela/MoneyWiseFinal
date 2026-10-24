@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Paste a money offer, link or provider name. MoneyWise checks it for pyramid scheme signs and tells you why.">
+  <title>MoneyWise | Is this money offer real?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <script src="report-popup.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="#" class="logo">MoneyWise</a>
+      <nav aria-label="Primary">
+        <ul class="nav">
+          <li><a href="#" class="nav-link is-active" aria-current="page">Home</a></li>
+          <li><a href="#" class="nav-link">Privacy</a></li>
+          <li><a href="#" class="nav-link">Terms</a></li>
+          <li><a href="Admin-login.html" class="nav-link">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap page">
+    <h1>Check before you pay</h1>
+    <p class="lead">Paste a money offer, link or provider name. We check it for pyramid scheme signs and tell you why.</p>
+
+    <div class="grid">
+      <!-- Input card -->
+      <section class="card" aria-label="Check an offer">
+        <div class="pills" role="tablist" aria-label="What are you checking?">
+          <button type="button" class="pill is-active" role="tab" aria-selected="true" data-type="message">Message</button>
+          <button type="button" class="pill" role="tab" aria-selected="false" data-type="link" tabindex="-1">Link</button>
+          <button type="button" class="pill" role="tab" aria-selected="false" data-type="provider" tabindex="-1">Provider name</button>
+        </div>
+
+        <div class="field-group" id="source-group">
+          <label for="source" class="label">How did you receive it?</label>
+          <select id="source" class="control">
+            <option>WhatsApp</option>
+            <option>SMS</option>
+            <option>Email</option>
+            <option>Facebook or Instagram</option>
+            <option>Phone call</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="offer" class="sr-only" id="offer-label">Message to check</label>
+          <textarea id="offer" class="control textarea" rows="5">Invest Now! Invest R1000 and get a return of R5000 in 10 days. Get an extra R500 if you invite more than 3 people to also join.</textarea>
+        </div>
+
+        <p class="hint">Do not paste your PIN, password or ID number.</p>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="check-btn">Check</button>
+          <button type="button" class="btn btn-outline" id="clear-btn">Clear</button>
+        </div>
+      </section>
+
+      <!-- Result card -->
+      <section class="card" id="result" aria-labelledby="result-label" tabindex="-1">
+        <div class="result-head">
+          <span class="muted" id="result-label">Result</span>
+          <span class="tag">Sample output</span>
+        </div>
+
+        <div class="alert" role="status">
+          <svg class="alert-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+            <path d="M12 9v4M12 17h.01"/>
+          </svg>
+          <div class="alert-body">
+            <h2 class="alert-title">Pyramid scam</h2>
+            <p class="alert-text">Pay in, big returns, invite others. Do not pay.</p>
+            <p class="score">92%</p>
+            <p class="score-label">pyramid scam chance</p>
+          </div>
+        </div>
+
+        <h3 class="why-title">Why</h3>
+        <p class="reason"><strong>Too good to be true.</strong> A 5x return in 10 days is far beyond any licensed investment.</p>
+        <p class="reason"><strong>Pays you to recruit.</strong> Bonuses for inviting people are a common sign of a pyramid scheme.</p>
+
+        <p class="stake">If you send R1000, you could lose all of it and are unlikely to get it back. Friends or family you invite could lose their money too.</p>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn-dark" id="report-btn" aria-haspopup="dialog">Report this</button>
+          <button type="button" class="btn btn-outline">Find safe alternatives</button>
+        </div>
+        <p class="footnote">Examples of FSCA-regulated providers: FNB, Capitec, Standard Bank. Always confirm on fsca.co.za.</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Report popup -->
+  <dialog id="report-dialog" class="modal" aria-labelledby="report-title">
+    <div class="modal-head">
+      <h2 id="report-title">Report a phishing attempt</h2>
+      <button type="button" class="modal-close" data-close aria-label="Close report form">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <form id="report-form" class="modal-body" novalidate>
+      <p class="modal-intro">Your report helps us warn other people. Do not include your PIN, password or ID number.</p>
+
+      <div class="field-group">
+        <label for="r-type" class="label">Phishing type</label>
+        <input id="r-type" name="phishing_type" class="control" list="r-type-list" placeholder="Type or choose" autocomplete="off" required>
+        <datalist id="r-type-list">
+          <option value="Email phishing">
+          <option value="SMS phishing (smishing)">
+          <option value="WhatsApp or social media message">
+          <option value="Fake website or link">
+          <option value="Phone call (vishing)">
+          <option value="Investment or pyramid scheme">
+        </datalist>
+      </div>
+
+      <div class="field-group">
+        <label for="r-message" class="label">Message</label>
+        <textarea id="r-message" name="message" class="control textarea" rows="4" placeholder="Paste the message you received" required></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label for="r-risk" class="label">Risk level</label>
+          <select id="r-risk" name="risk_level" class="control" required>
+            <option value="high" selected>High risk</option>
+            <option value="medium">Medium risk</option>
+            <option value="low">Low risk</option>
+            <option value="unsure">Not sure</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="r-date" class="label">Date received</label>
+          <input id="r-date" name="date_received" type="date" class="control">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="r-sender" class="label">Sender identifier</label>
+        <input id="r-sender" name="sender" class="control" placeholder="Phone number, email, username or website" autocomplete="off">
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label for="r-asked" class="label">Amount asked for</label>
+          <div class="money"><span aria-hidden="true">R</span>
+            <input id="r-asked" name="amount_asked" type="number" min="0" step="0.01" inputmode="decimal" class="control" placeholder="0.00">
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="r-promised" class="label">Amount promised</label>
+          <div class="money"><span aria-hidden="true">R</span>
+            <input id="r-promised" name="amount_promised" type="number" min="0" step="0.01" inputmode="decimal" class="control" placeholder="0.00">
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="r-shot" class="label">Screenshot <span class="optional">(optional)</span></label>
+        <input id="r-shot" name="screenshot" type="file" accept="image/*" class="control file">
+        <p class="hint" id="r-shot-hint">PNG or JPG, up to 5 MB. Hide any personal details first.</p>
+      </div>
+
+      <div class="btn-row modal-actions">
+        <button type="submit" class="btn btn-primary">Submit report</button>
+        <button type="button" class="btn btn-outline" data-close>Cancel</button>
+      </div>
+    </form>
+
+    <div class="modal-success" id="report-success" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+      <h3>Thank you</h3>
+      <p>Your report was received. It helps protect other people from the same scam.</p>
+      <button type="button" class="btn btn-primary" data-close>Close</button>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>MoneyWise gives guidance, not a guarantee. Always check with official channels.</p>
+      <nav aria-label="Footer">
+        <ul class="footer-links">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

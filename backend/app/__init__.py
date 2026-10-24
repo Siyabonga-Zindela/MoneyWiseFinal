@@ -1,0 +1,1 @@
+"""MoneyWise backend application package."""
