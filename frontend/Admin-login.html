@@ -9,10 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="style.css">
-  <script src="admin-login.js" defer></script>
 </head>
 <body>
-
+ 
   <header class="site-header">
     <div class="wrap header-inner">
       <a href="index.html" class="logo">MoneyWise</a>
@@ -23,17 +22,15 @@
       </nav>
     </div>
   </header>
-
+            
   <main class="auth-main">
     <section class="card auth-card" aria-labelledby="auth-title">
-      <span class="tag auth-tag">Admin only</span>
-      <h1 id="auth-title" class="auth-title" style="text-align: center;">Admin <span style="color: #dc2a1c;">sign in</span></h1>
+     <!-- <span class="tag auth-tag">Admin only</span>-->
+      <h1 id="auth-title" class="auth-title" style="text-align: center;">Sign in</span></h1>
       <p class="auth-sub" style="text-align: center;">Sign in to review the phishing reports submitted by users.</p>
-
-      <div id="auth-error" class="form-error" role="alert" hidden></div>
-
+ 
       <form id="login-form" novalidate>
-        <!-- Email Field with Icon -->
+        <!-- Email field with icon -->
         <div class="field-group">
           <label for="email" class="label">Email address</label>
           <div class="input-icon-wrap">
@@ -41,12 +38,11 @@
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
-            <input id="email" name="email" type="email" class="control has-icon" autocomplete="username" inputmode="email" placeholder="admin@example.com" required>
+            <input id="email" name="email" type="email" class="control has-icon" autocomplete="username" inputmode="email" placeholder="enter@example.com">
           </div>
-          <p class="field-error" id="email-error" hidden></p>
         </div>
-
-        <!-- Password Field with Icon -->
+ 
+        <!-- Password field with icon -->
         <div class="field-group">
           <label for="password" class="label">Password</label>
           <div class="pw-wrap input-icon-wrap">
@@ -54,19 +50,19 @@
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
-            <input id="password" name="password" type="password" class="control has-icon" autocomplete="current-password" placeholder="Enter your password" required>
+            <input id="password" name="password" type="password" class="control has-icon" autocomplete="current-password" placeholder="enter your password">
             <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Show password" aria-pressed="false">Show</button>
           </div>
           <p class="field-hint" id="caps-hint" hidden>Caps Lock is on.</p>
-          <p class="field-error" id="password-error" hidden></p>
         </div>
-
-        <button type="submit" class="btn btn-primary auth-submit" id="login-btn">Sign in</button>
-        <a href="#" class="auth-link" id="forgot-link">Forgot your password?</a>
+ 
+        <button type="submit" class="btn btn-primary auth-submit">Sign in</button>
+        <button type="submit" class="btn btn-primary auth-submit">Stakeholder</button>
+        <a href="#" class="auth-link">Forgot your password?</a>
       </form>
     </section>
   </main>
-
+ 
   <footer class="site-footer">
     <div class="wrap footer-inner">
       <p>MoneyWise gives guidance, not a guarantee. Always check with official channels.</p>
@@ -78,6 +74,38 @@
       </nav>
     </div>
   </footer>
-
+ 
+  <!-- All the page's code is here, so there is no separate script file to get out of date. -->
+  <script>
+    (function () {
+      var form = document.getElementById('login-form');
+      var password = document.getElementById('password');
+      var toggle = document.getElementById('pw-toggle');
+      var caps = document.getElementById('caps-hint');
+ 
+      // Show / hide password
+      toggle.addEventListener('click', function () {
+        var show = password.type === 'password';
+        password.type = show ? 'text' : 'password';
+        toggle.textContent = show ? 'Hide' : 'Show';
+        toggle.setAttribute('aria-pressed', String(show));
+        toggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        password.focus();
+      });
+ 
+      // Caps Lock warning
+      function checkCaps(e) { if (e.getModifierState) caps.hidden = !e.getModifierState('CapsLock'); }
+      password.addEventListener('keydown', checkCaps);
+      password.addEventListener('keyup', checkCaps);
+      password.addEventListener('blur', function () { caps.hidden = true; });
+ 
+      // Sign in: go straight to the admin dashboard
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        window.location.href = 'admin-dashboard.html';
+      });
+    })();
+  </script>
+ 
 </body>
 </html>
