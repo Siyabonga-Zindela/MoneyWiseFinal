@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23dc2a1c'/%3E%3Ctext x='16' y='23' font-family='Arial' font-size='19' font-weight='bold' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Stakeholders | MoneyWise Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="mw-auth.js" defer></script>
+  <script src="users.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <a href="admin-dashboard.html" class="logo">MoneyWise</a>
+        <span class="tag">Admin</span>
+      </div>
+      <div class="header-right">
+        <nav class="admin-nav" aria-label="Admin">
+          <a href="admin-dashboard.html" class="nav-link">Reports</a>
+          <a href="admin-users.html" class="nav-link is-active" aria-current="page">Stakeholders</a>
+        </nav>
+        <button type="button" class="btn btn-outline btn-sm" id="signout-btn">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap page dash">
+    <div class="title-row">
+      <div>
+        <h1 class="dash-title">Stakeholders</h1>
+        <p class="dash-sub">External organisations that receive and review phishing reports, such as banks, mobile networks and regulators.</p>
+      </div>
+      <button type="button" class="btn btn-primary" id="add-btn">Add stakeholder</button>
+    </div>
+
+    <a class="callout" href="admin-dashboard.html" id="waiting-link">
+      <span><strong id="waiting-count">0</strong> <span id="waiting-text">new reports are waiting for review</span></span>
+      <span class="callout-go">Open reports &rarr;</span>
+    </a>
+
+    <section class="stats" aria-label="Summary">
+      <div class="stat"><p class="stat-label">Total stakeholders</p><p class="stat-value" id="stat-total">0</p></div>
+      <div class="stat"><p class="stat-label">Active</p><p class="stat-value" id="stat-active">0</p></div>
+      <div class="stat"><p class="stat-label">Invitation pending</p><p class="stat-value" id="stat-invited">0</p></div>
+      <div class="stat"><p class="stat-label">Suspended</p><p class="stat-value" id="stat-suspended">0</p></div>
+    </section>
+
+    <section class="card toolbar" aria-label="Filters">
+      <div class="tool-field tool-search">
+        <label for="f-search" class="label">Search</label>
+        <input id="f-search" type="search" class="control" placeholder="Name, email or organisation" autocomplete="off">
+      </div>
+      <div class="tool-field">
+        <label for="f-type" class="label">Organisation type</label>
+        <select id="f-type" class="control"><option value="">All</option></select>
+      </div>
+      <div class="tool-field">
+        <label for="f-status" class="label">Status</label>
+        <select id="f-status" class="control">
+          <option value="">All</option><option value="active">Active</option><option value="invited">Invitation pending</option><option value="suspended">Suspended</option>
+        </select>
+      </div>
+      <div class="tool-actions"><button type="button" class="btn btn-outline" id="reset-btn">Reset</button></div>
+    </section>
+
+    <section class="card table-card" aria-label="Stakeholders">
+      <div class="table-scroll">
+        <table class="reports">
+          <caption class="sr-only">External stakeholders</caption>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Organisation</th>
+              <th scope="col">Access</th>
+              <th scope="col">Alerts</th>
+              <th scope="col">Status</th>
+              <th scope="col">Last active</th>
+              <th scope="col"><span class="sr-only">Action</span></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="empty" hidden>No stakeholders match your filters.</p>
+      <div class="pager">
+        <p class="pager-info" id="pager-info" aria-live="polite"></p>
+        <div class="pager-btns">
+          <button type="button" class="btn btn-outline btn-sm" id="prev-btn">Previous</button>
+          <button type="button" class="btn btn-outline btn-sm" id="next-btn">Next</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add / manage panel -->
+  <div class="panel-overlay" id="panel-overlay" hidden>
+    <aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title" tabindex="-1">
+      <div class="panel-head">
+        <div>
+          <p class="panel-kicker" id="panel-kicker"></p>
+          <h2 id="panel-title">Add stakeholder</h2>
+        </div>
+        <button type="button" class="icon-btn" id="panel-close" aria-label="Close panel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="panel-body">
+        <form id="user-form" novalidate>
+          <p class="panel-intro" id="panel-intro"></p>
+
+          <div class="field-group">
+            <label for="s-name" class="label">Full name</label>
+            <input id="s-name" class="control" autocomplete="off" maxlength="120">
+            <p class="field-error" id="s-name-error" hidden></p>
+          </div>
+          <div class="field-group">
+            <label for="s-email" class="label">Work email address</label>
+            <input id="s-email" type="email" class="control" autocomplete="off" inputmode="email" maxlength="200">
+            <p class="field-hint" id="s-email-hint" hidden></p>
+            <p class="field-error" id="s-email-error" hidden></p>
+          </div>
+          <div class="field-group">
+            <label for="s-org" class="label">Organisation</label>
+            <input id="s-org" class="control" autocomplete="off" maxlength="120">
+            <p class="field-error" id="s-org-error" hidden></p>
+          </div>
+          <div class="field-group">
+            <label for="s-type" class="label">Organisation type</label>
+            <select id="s-type" class="control"></select>
+          </div>
+          <div class="field-group">
+            <label for="s-access" class="label">Access level</label>
+            <select id="s-access" class="control">
+              <option value="view">View reports only</option>
+              <option value="review">Review reports and add notes</option>
+            </select>
+            <p class="field-hint" id="s-access-hint"></p>
+          </div>
+          <div class="field-group">
+            <label for="s-alerts" class="label">Email alerts for new reports</label>
+            <select id="s-alerts" class="control">
+              <option value="none">No alerts</option>
+              <option value="high">High-risk reports only</option>
+              <option value="all">All new reports</option>
+            </select>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary" id="save-btn">Send invitation</button>
+            <button type="button" class="btn btn-outline" id="cancel-btn">Cancel</button>
+          </div>
+        </form>
+
+        <div class="manage" id="manage-box" hidden>
+          <h3 class="panel-h">Account</h3>
+          <p class="manage-line"><span id="m-status"></span> <span class="muted" id="m-last"></span></p>
+          <div class="btn-row">
+            <button type="button" class="btn btn-outline" id="suspend-btn">Suspend access</button>
+            <button type="button" class="btn btn-outline" id="resend-btn">Resend invitation</button>
+            <button type="button" class="btn btn-outline btn-remove" id="remove-btn">Remove</button>
+          </div>
+          <div class="confirm" id="confirm-box" hidden role="alert">
+            <p id="confirm-text"></p>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary" id="confirm-yes">Yes, remove</button>
+              <button type="button" class="btn btn-outline" id="confirm-no">Keep</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+</body>
+</html>

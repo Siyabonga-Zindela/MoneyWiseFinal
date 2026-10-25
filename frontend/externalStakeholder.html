@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MoneyWise | Partner portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="xs">
+
+  <header class="topbar">
+    <div class="logo">MoneyWise<span class="logo-dot">.</span><span class="logo-sub">PARTNER PORTAL</span></div>
+    <div class="role">
+      <div class="role-text"><strong>Partner</strong><span>FNB</span></div>
+      <span class="avatar" aria-hidden="true">PT</span>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page-head">
+      <h1>Partner portal</h1>
+      <p>Reports the MoneyWise team shares with your organisation, plus the investment offers customers see in MoneyWise.</p>
+    </div>
+
+    <!-- REPORT INBOX: reports forwarded by the MoneyWise admin -->
+    <section class="panel" aria-labelledby="inboxTitle" style="margin-bottom: 1.5rem;">
+      <div class="list-head">
+        <h2 class="panel-title" id="inboxTitle">Reports shared with your organisation</h2>
+        <span class="list-count" id="inboxCount"></span>
+      </div>
+      <p class="panel-sub">Scam reports that mention or impersonate your organisation. Mark each one as received so the team knows it reached the right people. The person who reported it stays anonymous.</p>
+      <ol class="inbox-list" id="inboxList"></ol>
+      <p class="panel-sub" id="inboxEmpty" hidden>No reports have been shared with your organisation yet.</p>
+    </section>
+
+    <div class="page-head">
+      <h2>Investment offers</h2>
+      <p>Add a new offer or update the ones customers already see in MoneyWise.</p>
+    </div>
+
+    <div class="xs-layout">
+
+      <!-- ADD OFFER: always visible, always starts empty -->
+      <section class="panel" aria-labelledby="addTitle">
+        <h2 class="panel-title" id="addTitle">Add offer</h2>
+        <p class="panel-sub">Fill in every field. Customers will see this next to their results.</p>
+
+        <form id="addForm" novalidate>
+          <div class="field">
+            <label for="productName">Product name</label>
+            <input id="productName" required placeholder="e.g. 12 Month Fixed Deposit">
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="productCategory">Product category</label>
+              <select id="productCategory" required>
+                <option value="" disabled selected>Select category</option>
+                <option>Call account</option>
+                <option>Fixed deposit</option>
+                <option>Unit trust</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="currency">Currency</label>
+              <input id="currency" value="ZAR (Rands)" readonly>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="description">Description</label>
+            <textarea id="description" required placeholder="What the product is and who it suits"></textarea>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="minInvestment">Minimum investment</label>
+              <div class="money"><span>R</span><input id="minInvestment" type="number" min="0" step="0.01" required></div>
+            </div>
+            <div class="field">
+              <label for="maxInvestment">Maximum investment</label>
+              <div class="money"><span>R</span><input id="maxInvestment" type="number" min="0" step="0.01" required></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="feesSummary">Fees summary</label>
+            <textarea id="feesSummary" required placeholder="e.g. No monthly fee. Annual management fee plus underlying fund fees."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="returnRange">Indicative return range</label>
+            <input id="returnRange" required placeholder="e.g. 7.5% – 8.5% p.a.">
+            <small>This is a guide, not a promise.</small>
+          </div>
+
+          <div class="field">
+            <label for="accessCondition">Access condition</label>
+            <input id="accessCondition" required placeholder="e.g. 32 days notice for withdrawals">
+          </div>
+
+          <div class="field">
+            <label for="materialRisk">Material risk</label>
+            <textarea id="materialRisk" required placeholder="e.g. The value of your investment can go down as well as up."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="timeframe">Suitable timeframe</label>
+            <select id="timeframe" required>
+              <option value="" disabled selected>Select timeframe</option>
+              <option>Under 1 year</option>
+              <option>1 to 3 years</option>
+              <option>3 to 5 years</option>
+              <option>5 years or more</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="url">Website for more information</label>
+            <input id="url" type="url" required placeholder="https://">
+          </div>
+
+          <div class="field">
+            <label for="updatedAt">Last updated</label>
+            <input id="updatedAt" readonly placeholder="Set automatically when you save">
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Add offer</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- MY OFFERS: list -->
+      <section class="panel" aria-labelledby="listTitle">
+        <div class="list-head">
+          <h2 class="panel-title" id="listTitle">My offers</h2>
+          <span class="list-count" id="listCount"></span>
+        </div>
+        <ul id="offerList"></ul>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- UPDATE POP-UP -->
+  <div class="modal hidden" id="updateModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <form class="modal-card" id="updateForm" novalidate>
+      <h2 class="panel-title" id="modalTitle">Update offer</h2>
+      <p class="modal-note">You can only change the fields marked "Can edit". Everything else is locked.</p>
+
+      <div class="field">
+        <label for="mProductName">Product name</label>
+        <input id="mProductName" readonly>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="mProductCategory">Product category</label>
+          <input id="mProductCategory" readonly>
+        </div>
+        <div class="field">
+          <label for="mCurrency">Currency</label>
+          <input id="mCurrency" readonly>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="mDescription">Description</label>
+        <textarea id="mDescription" readonly></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="mMin">Minimum investment <span class="editable-tag">Can edit</span></label>
+          <div class="money"><span>R</span><input id="mMin" type="number" min="0" step="0.01" required></div>
+        </div>
+        <div class="field">
+          <label for="mMax">Maximum investment <span class="editable-tag">Can edit</span></label>
+          <div class="money"><span>R</span><input id="mMax" type="number" min="0" step="0.01" required></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="mFees">Fees summary</label>
+        <textarea id="mFees" readonly></textarea>
+      </div>
+
+      <div class="field">
+        <label for="mReturn">Indicative return range <span class="editable-tag">Can edit</span></label>
+        <input id="mReturn" required>
+      </div>
+
+      <div class="field">
+        <label for="mAccess">Access condition</label>
+        <input id="mAccess" readonly>
+      </div>
+
+      <div class="field">
+        <label for="mRisk">Material risk</label>
+        <textarea id="mRisk" readonly></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="mTimeframe">Suitable timeframe</label>
+          <input id="mTimeframe" readonly>
+        </div>
+        <div class="field">
+          <label for="mUrl">Website</label>
+          <input id="mUrl" readonly>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="mUpdated">Last updated</label>
+        <input id="mUpdated" readonly>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Save changes</button>
+        <button class="btn btn-secondary" type="button" id="closeModal">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+  <script src="mw-auth.js"></script>
+  <script src="externalStakeholder.js" defer></script>
+</body>
+</html>

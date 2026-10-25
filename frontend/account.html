@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23dc2a1c'/%3E%3Ctext x='16' y='23' font-family='Arial' font-size='19' font-weight='bold' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Create account or sign in | MoneyWise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo">MoneyWise</a>
+      <nav aria-label="Primary">
+        <ul class="nav">
+          <li><a href="index.html" class="nav-link">Back to site</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="auth-main">
+    <section class="card auth-card" aria-labelledby="auth-title">
+      <h1 id="auth-title" class="auth-title" style="text-align: center;">Welcome to MoneyWise</h1>
+      <p class="auth-sub" style="text-align: center;">A free account links the reports you file and the checks you run, so the review team can follow up with you. Checking stays open to everyone without one.</p>
+
+      <div class="pills auth-tabs" role="tablist" aria-label="Choose sign in or create account" style="justify-content: center; margin-bottom: 1.25rem;">
+        <button type="button" class="pill is-active" id="tab-signin" role="tab" aria-selected="true" aria-controls="signin-form">Sign in</button>
+        <button type="button" class="pill" id="tab-signup" role="tab" aria-selected="false" aria-controls="signup-form" tabindex="-1">Create account</button>
+      </div>
+
+      <div class="form-error" id="auth-error" role="alert" hidden></div>
+
+      <!-- Sign in -->
+      <form id="signin-form" novalidate>
+        <div class="field-group">
+          <label for="si-email" class="label">Email address</label>
+          <input id="si-email" name="email" type="email" class="control" autocomplete="username" inputmode="email" placeholder="you@example.com" required>
+          <p class="field-error" id="si-email-error" hidden></p>
+        </div>
+        <div class="field-group">
+          <label for="si-password" class="label">Password</label>
+          <input id="si-password" name="password" type="password" class="control" autocomplete="current-password" placeholder="Your password" required>
+          <p class="field-error" id="si-password-error" hidden></p>
+        </div>
+        <button type="submit" class="btn btn-primary auth-submit" id="signin-btn">Sign in</button>
+      </form>
+
+      <!-- Create account -->
+      <form id="signup-form" novalidate hidden>
+        <div class="field-group">
+          <label for="su-name" class="label">Full name</label>
+          <input id="su-name" name="full_name" type="text" class="control" autocomplete="name" maxlength="150" placeholder="For example Thandi Mokoena" required>
+          <p class="field-error" id="su-name-error" hidden></p>
+        </div>
+        <div class="field-group">
+          <label for="su-email" class="label">Email address</label>
+          <input id="su-email" name="email" type="email" class="control" autocomplete="username" inputmode="email" placeholder="you@example.com" required>
+          <p class="field-error" id="su-email-error" hidden></p>
+        </div>
+        <div class="field-group">
+          <label for="su-phone" class="label">Mobile number <span class="opt">(optional)</span></label>
+          <input id="su-phone" name="phone" type="tel" class="control" autocomplete="tel" maxlength="32" placeholder="For example 072 123 4567">
+        </div>
+        <div class="field-group">
+          <label for="su-password" class="label">Password</label>
+          <input id="su-password" name="password" type="password" class="control" autocomplete="new-password" placeholder="At least 8 characters" required>
+          <p class="field-hint">Use at least 8 characters with an uppercase letter and a number. Never reuse a password from another site.</p>
+          <p class="field-error" id="su-password-error" hidden></p>
+        </div>
+        <button type="submit" class="btn btn-primary auth-submit" id="signup-btn">Create my account</button>
+      </form>
+
+      <!-- Signed-in state -->
+      <div id="signedin-box" hidden style="text-align: center;">
+        <p class="auth-sub" id="signedin-as"></p>
+        <div class="btn-row" style="justify-content: center;">
+          <a class="btn btn-primary" href="check.html">Check a suspicious message</a>
+          <button type="button" class="btn btn-outline" id="signout-btn">Sign out</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>MoneyWise gives guidance, not a guarantee. Always check with official channels.</p>
+      <nav aria-label="Footer">
+        <ul class="footer-links">
+          <li><a href="index.html#privacy">Privacy &amp; terms</a></li>
+          <li><a href="Admin-login.html">Admin &amp; stakeholder sign-in</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="account.js" defer></script>
+</body>
+</html>

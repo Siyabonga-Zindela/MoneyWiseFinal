@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23dc2a1c'/%3E%3Ctext x='16' y='23' font-family='Arial' font-size='19' font-weight='bold' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+  <meta name="description" content="Paste a money offer, link or provider name. MoneyWise checks it for pyramid scheme signs and tells you why.">
+  <title>MoneyWise | Is this money offer real?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="Script.js" defer></script>
+  <script src="report-popup.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#offer">Skip to the checker</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo">MoneyWise</a>
+      <nav aria-label="Primary">
+        <ul class="nav">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="check.html" class="nav-link is-active" aria-current="page">Check a message</a></li>
+          <li><a href="index.html#warning-signs" class="nav-link">Warning signs</a></li>
+          <li><a href="account.html" class="nav-link">Sign up</a></li>
+          <li><a href="Admin-login.html" class="nav-link">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap page">
+    <h1>Check before you pay</h1>
+    <p class="lead">Paste a money offer, link or provider name. We check it for known scam warning signs, show you the evidence behind the verdict, and tell you what to do next.</p>
+
+    <div class="grid">
+      <!-- Input card -->
+      <section class="card" aria-label="Check an offer">
+        <div class="pills" role="tablist" aria-label="What are you checking?">
+          <button type="button" class="pill is-active" role="tab" aria-selected="true" data-type="message">Message</button>
+          <button type="button" class="pill" role="tab" aria-selected="false" data-type="link" tabindex="-1">Link</button>
+          <button type="button" class="pill" role="tab" aria-selected="false" data-type="provider" tabindex="-1">Provider name</button>
+        </div>
+
+        <div class="field-group" id="source-group">
+          <label for="source" class="label">How did you receive it?</label>
+          <select id="source" class="control">
+            <option>WhatsApp</option>
+            <option>SMS</option>
+            <option>Email</option>
+            <option>Facebook or Instagram</option>
+            <option>Phone call</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="sender" class="label">Who sent it? <span class="opt">(optional)</span></label>
+          <input id="sender" name="sender" type="text" class="control" maxlength="255" autocomplete="off" inputmode="email" placeholder="Number, email address or link it came from">
+          <p class="hint">If other people already reported this contact, your check says so and is marked high risk. Sender details are never shown to other users.</p>
+        </div>
+
+        <div class="field-group">
+          <label for="offer" class="sr-only" id="offer-label">Message to check</label>
+          <textarea id="offer" class="control textarea" rows="5" maxlength="5000" aria-describedby="offer-counter" placeholder="Paste the message, offer or link you want to check"></textarea>
+          <p class="hint counter-hint"><span id="offer-counter">0</span>/5000 characters</p>
+        </div>
+
+        <p class="hint">Do not paste your PIN, password or ID number.</p>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="check-btn">Check</button>
+          <button type="button" class="btn btn-outline" id="clear-btn">Clear</button>
+        </div>
+      </section>
+
+      <!-- Result card (starts as an empty state; filled by Script.js) -->
+      <section class="card" id="result" aria-labelledby="result-label" aria-live="polite" tabindex="-1">
+        <div class="result-head">
+          <span class="muted" id="result-label">Result</span>
+          <span class="tag" id="result-tag">Waiting for a check</span>
+        </div>
+
+        <!-- Empty state -->
+        <div class="result-empty" id="result-empty">
+          <svg class="result-empty-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <p>The result of your check will appear here, including the evidence that led to it.</p>
+        </div>
+
+        <!-- Filled after a check -->
+        <div class="result-body" id="result-body" hidden>
+          <div class="alert" role="status">
+            <svg class="alert-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+              <path d="M12 9v4M12 17h.01"/>
+            </svg>
+            <div class="alert-body">
+              <h2 class="alert-title" id="verdict-title"></h2>
+              <p class="alert-text" id="verdict-text"></p>
+              <p class="score" id="risk-score" hidden></p>
+              <p class="score-label" id="risk-score-label" hidden></p>
+            </div>
+          </div>
+
+          <div id="result-detail">
+            <h3 class="why-title">What led to this result</h3>
+            <div id="evidence-list"></div>
+
+            <h3 class="why-title">What this rating means</h3>
+            <p class="reason" id="rating-meaning"></p>
+
+            <h3 class="why-title">What we cannot confirm</h3>
+            <p class="reason" id="uncertainty"></p>
+
+            <h3 class="why-title">Recommended next steps</h3>
+            <ul class="next-steps" id="next-steps"></ul>
+
+            <h3 class="why-title">How to verify on your own</h3>
+            <p class="reason" id="verification"></p>
+
+            <p class="stake" id="source-note"></p>
+
+            <div class="btn-row">
+              <button type="button" class="btn btn-dark" id="report-btn" aria-haspopup="dialog">Report this</button>
+              <a class="btn btn-outline" href="index.html#warning-signs">Learn the warning signs</a>
+            </div>
+            <p class="footnote">Automated guidance, not proof of fraud. Always confirm a provider with official channels such as fsca.co.za.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- The report popup is injected by report-popup.js when "Report this" is clicked. -->
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>MoneyWise gives guidance, not a guarantee. Always check with official channels.</p>
+      <nav aria-label="Footer">
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#warning-signs">Warning signs</a></li>
+          <li><a href="index.html#privacy">Privacy &amp; terms</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

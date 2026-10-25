@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23dc2a1c'/%3E%3Ctext x='16' y='23' font-family='Arial' font-size='19' font-weight='bold' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Phishing reports | MoneyWise Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="mw-auth.js" defer></script>
+  <script src="dashboard.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <a href="admin-dashboard.html" class="logo">MoneyWise</a>
+        <span class="tag">Admin</span>
+      </div>
+      <div class="header-right">
+        <nav class="admin-nav" aria-label="Admin">
+          <a href="admin-dashboard.html" class="nav-link is-active" aria-current="page">Reports</a>
+          <a href="admin-users.html" class="nav-link">Stakeholders</a>
+        </nav>
+        <button type="button" class="btn btn-outline btn-sm" id="signout-btn">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap page dash">
+    <h1 class="dash-title">Phishing reports</h1>
+    <p class="dash-sub">Review what users have reported, confirm scams and keep track of what you have handled.</p>
+
+    <!-- Summary -->
+    <section class="stats" aria-label="Summary">
+      <div class="stat"><p class="stat-label">Total reports</p><p class="stat-value" id="stat-total">0</p></div>
+      <div class="stat"><p class="stat-label">High risk</p><p class="stat-value stat-red" id="stat-high">0</p></div>
+      <div class="stat"><p class="stat-label">Waiting for review</p><p class="stat-value" id="stat-new">0</p></div>
+      <div class="stat"><p class="stat-label">Money users were asked for</p><p class="stat-value" id="stat-money">R0</p></div>
+    </section>
+
+    <!-- Filters -->
+    <section class="card toolbar" aria-label="Filters">
+      <div class="tool-field tool-search">
+        <label for="f-search" class="label">Search</label>
+        <input id="f-search" type="search" class="control" placeholder="Message, sender or report number" autocomplete="off">
+      </div>
+      <div class="tool-field">
+        <label for="f-risk" class="label">Risk level</label>
+        <select id="f-risk" class="control">
+          <option value="">All</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option><option value="unsure">Not sure</option>
+        </select>
+      </div>
+      <div class="tool-field">
+        <label for="f-status" class="label">Status</label>
+        <select id="f-status" class="control">
+          <option value="">All</option><option value="new">New</option><option value="reviewing">Reviewing</option><option value="confirmed">Confirmed scam</option><option value="dismissed">Dismissed</option>
+        </select>
+      </div>
+      <div class="tool-field">
+        <label for="f-type" class="label">Phishing type</label>
+        <select id="f-type" class="control"><option value="">All</option></select>
+      </div>
+      <div class="tool-actions">
+        <button type="button" class="btn btn-outline" id="reset-btn">Reset</button>
+        <button type="button" class="btn btn-outline" id="export-btn">Export CSV</button>
+      </div>
+    </section>
+
+    <!-- Table -->
+    <section class="card table-card" aria-label="Reports">
+      <div class="table-scroll">
+        <table class="reports">
+          <caption class="sr-only">Phishing reports submitted by users</caption>
+          <thead>
+            <tr>
+              <th scope="col"><button type="button" class="sort-btn" id="sort-date" aria-label="Sort by date received">Date received <span id="sort-arrow" aria-hidden="true">&darr;</span></button></th>
+              <th scope="col">Phishing type</th>
+              <th scope="col">Sender</th>
+              <th scope="col">Risk</th>
+              <th scope="col" class="num">Asked for</th>
+              <th scope="col">Status</th>
+              <th scope="col"><span class="sr-only">Action</span></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="empty" hidden>No reports match your filters.</p>
+      <div class="pager">
+        <p class="pager-info" id="pager-info" aria-live="polite"></p>
+        <div class="pager-btns">
+          <button type="button" class="btn btn-outline btn-sm" id="prev-btn">Previous</button>
+          <button type="button" class="btn btn-outline btn-sm" id="next-btn">Next</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Report details panel -->
+  <div class="panel-overlay" id="panel-overlay" hidden>
+    <aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title" tabindex="-1">
+      <div class="panel-head">
+        <div>
+          <p class="panel-kicker" id="panel-kicker"></p>
+          <h2 id="panel-title">Report details</h2>
+        </div>
+        <button type="button" class="icon-btn" id="panel-close" aria-label="Close details">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="panel-body">
+        <div class="badges"><span id="p-risk"></span><span id="p-status"></span></div>
+
+        <dl class="facts">
+          <div><dt>Phishing type</dt><dd id="p-type"></dd></div>
+          <div><dt>Sender</dt><dd id="p-sender"></dd></div>
+          <div><dt>Date received</dt><dd id="p-date"></dd></div>
+          <div><dt>Submitted</dt><dd id="p-submitted"></dd></div>
+          <div><dt>Amount asked for</dt><dd id="p-asked"></dd></div>
+          <div><dt>Amount promised</dt><dd id="p-promised"></dd></div>
+        </dl>
+
+        <h3 class="panel-h">Message</h3>
+        <p class="message-box" id="p-message"></p>
+
+        <div id="p-shot-wrap" hidden>
+          <h3 class="panel-h">Screenshot</h3>
+          <img id="p-shot" class="shot" alt="Screenshot submitted with the report">
+        </div>
+
+        <div id="p-repeat-wrap" hidden>
+          <h3 class="panel-h">Repeat scam signal</h3>
+          <p class="hint" id="p-repeat" style="margin: 0 0 1rem;"></p>
+        </div>
+
+        <!-- Send to stakeholder (impersonation handover) -->
+        <div id="forward-section" class="forward-box">
+          <h3 class="panel-h">Send to a stakeholder</h3>
+          <p class="hint" style="margin-top: 0;">For impersonation reports: the organisation being impersonated gets this report inside their MoneyWise inbox. They are told it came from the MoneyWise team &mdash; never who reported it.</p>
+          <div id="forwarded-list" hidden></div>
+          <div class="field-group">
+            <label for="f-stake" class="label">Stakeholder</label>
+            <select id="f-stake" class="control">
+              <option value="">Choose an organisation&hellip;</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="f-note" class="label">Message to them <span class="opt">(optional)</span></label>
+            <textarea id="f-note" class="control textarea" rows="2" maxlength="1000" placeholder="For example: we received several reports impersonating your SMS brand"></textarea>
+          </div>
+          <p class="field-error" id="f-error" hidden></p>
+          <div class="btn-row">
+            <button type="button" class="btn btn-dark" id="forward-btn">Send report</button>
+          </div>
+        </div>
+
+        <form id="review-form" class="review">
+          <h3 class="panel-h">Your review</h3>
+          <div class="field-group">
+            <label for="r-status" class="label">Status</label>
+            <select id="r-status" class="control">
+              <option value="new">New</option><option value="reviewing">Reviewing</option><option value="confirmed">Confirmed scam</option><option value="dismissed">Dismissed</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="r-note" class="label">Internal note <span class="opt">(only admins see this)</span></label>
+            <textarea id="r-note" class="control textarea" rows="3" maxlength="1000"></textarea>
+          </div>
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary" id="save-btn">Save review</button>
+            <button type="button" class="btn btn-outline" id="cancel-btn">Close</button>
+          </div>
+        </form>
+      </div>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+</body>
+</html>
