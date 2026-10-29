@@ -1,0 +1,49 @@
+﻿# Render Blueprint for the MoneyWise backend.
+# Deploy via Render dashboard: New + -> Blueprint -> pick this repo.
+# The database stays on Neon - Render only needs outbound access to it.
+services:
+  - type: web
+    name: moneywise-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: IP_HASH_SALT
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: google/gemma-3-27b-it
+      - key: OPENROUTER_BASE_URL
+        value: https://openrouter.ai/api/v1
+      - key: ENVIRONMENT
+        value: production
+      - key: CORS_ORIGINS
+        value: https://moneywisefinal.vercel.app,http://localhost:8000
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "15"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "7"
+      - key: BCRYPT_ROUNDS
+        value: "12"
+      - key: FAILED_LOGIN_WINDOW_MINUTES
+        value: "15"
+      - key: FAILED_LOGIN_MAX_ATTEMPTS
+        value: "5"
+      - key: ACCOUNT_LOCK_MINUTES
+        value: "15"
+      - key: RATE_LIMIT_AUTH
+        value: 1000/minute
+      - key: RATE_LIMIT_REPORTS
+        value: 10/minute
+      - key: MAX_BODY_MB
+        value: "8"
